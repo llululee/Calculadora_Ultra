@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Ultragaz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-control {
+            width: 200px;
+        }
+        .valor-anual-desconto {
+        margin-bottom: 400px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            
+
+        }
+
+        .result-container {
+            margin-top: 20px;
+            margin-bottom: 150px;
+            background-color: rgba(118, 147, 160, 0.144);
+            border-radius: 2%;
+            padding: 10px; /* Espaço extra para evitar sobreposição */
+        }
+
+
+        #resultado-com-imposto u,
+        #resultado-sem-imposto u,
+        #resultado-com-desconto u,
+        #valor-desconto u,
+        #valor-anual-desconto u {
+            color: rgb(0, 0, 0);
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        #resultado-sem-imposto u {
+            background-color: rgb(255, 154, 71);
+            border-radius: 10%;
+            padding: 3px;
+            color: rgb(255, 255, 255);
+        }
+        #resultado-com-desconto u {
+            background-color: rgba(39, 114, 255, 0.774);
+            border-radius: 10%;
+            padding: 3px;
+            color: rgb(255, 255, 255);
+        }
+        #valor-desconto u {
+            background-color: rgb(56, 190, 51);
+            border-radius: 10%;
+            padding: 3px;
+            color: rgb(255, 255, 255);
+        }
+        #valor-anual-desconto u {
+            background-color: rgb(56, 190, 51);
+            border-radius: 10%;
+            padding:3px;
+            color: rgb(255, 255, 255);
+        }
+
+        footer {
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Calculadora Ultragaz</h2>
+        <div class="mb-3">
+            <label for="phase" class="form-label">Escolha a Fase:</label>
+            <div>
+                <button id="monofasico" class="btn btn-primary mx-1 my-2" onclick="selectPhase(30)">Monofásico (30)</button>
+                <button id="bifasico" class="btn btn-primary mx-1 my-2" onclick="selectPhase(50)">Bifásico (50)</button>
+                <button id="trifasico" class="btn btn-primary mx-1 my-2" onclick="selectPhase(100)">Trifásico (100)</button>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="consumo" class="form-label">Consumo em kWh:</label>
+            <input type="number" class="form-control" id="consumo">
+        </div>
+        <div class="mb-3">
+            <label for="tusd" class="form-label">TUSD (Sem Imposto):</label>
+            <input type="number" class="form-control" id="tusd">
+        </div>
+        <div class="mb-3">
+            <label for="te" class="form-label">TE (Sem Imposto):</label>
+            <input type="number" class="form-control" id="te">
+        </div>
+        <div class="mb-3">
+            <label for="tusd-imposto" class="form-label">TUSD (Com Imposto):</label>
+            <input type="number" class="form-control" id="tusd-imposto">
+        </div>
+        <div class="mb-3">
+            <label for="te-imposto" class="form-label">TE (Com Imposto):</label>
+            <input type="number" class="form-control" id="te-imposto">
+        </div>
+        <div class="mb-3">
+            <label for="desconto" class="form-label">Desconto (%):</label>
+            <input type="number" class="form-control" id="desconto">
+        </div>
+        <button class="btn btn-primary" onclick="calcular()">Calcular</button>
+
+        <div class="result-container">
+            <h4>Resultados:</h4>
+            <p id="resultado-com-imposto"></p>
+            <p id="resultado-sem-imposto"></p>
+            <p id="resultado-com-desconto"></p>
+            <p id="valor-desconto"></p>
+            <p id="valor-anual-desconto"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Todos os direitos reservados © 2024 | By: <a href="https://github.com/zmadou" target="_blank">zMadou</a></p>
+    </footer>
+
+    <script>
+        let fase = 0;
+
+        function selectPhase(value) {
+            fase = value;
+            document.getElementById('monofasico').classList.remove('btn-primary');
+            document.getElementById('bifasico').classList.remove('btn-primary');
+            document.getElementById('trifasico').classList.remove('btn-primary');
+
+            if (value === 30) {
+                document.getElementById('monofasico').classList.add('btn-primary');
+            } else if (value === 50) {
+                document.getElementById('bifasico').classList.add('btn-primary');
+            } else {
+                document.getElementById('trifasico').classList.add('btn-primary');
+            }
+        }
+
+        function calcular() {
+            const consumo = parseFloat(document.getElementById('consumo').value);
+            const desconto = parseFloat(document.getElementById('desconto').value) / 100;
+
+            const tusdSemImposto = parseFloat(document.getElementById('tusd').value);
+            const teSemImposto = parseFloat(document.getElementById('te').value);
+
+            const tusdComImposto = parseFloat(document.getElementById('tusd-imposto').value);
+            const teComImposto = parseFloat(document.getElementById('te-imposto').value);
+
+            const valorSemImposto = (tusdSemImposto + teSemImposto) * (consumo - fase);
+            const valorComImposto = (tusdComImposto + teComImposto) * (consumo - fase);
+            const valorComDesconto = valorSemImposto * (1 - desconto);
+
+            const valorAnualSemImposto = valorSemImposto * 12;
+            const valorAnualComImposto = valorComImposto * 12;
+            const valorAnualComDesconto = valorComDesconto * 12;
+            const valorDoDesconto = valorSemImposto - valorComDesconto;
+            const valorAnualDesconto = valorDoDesconto * 12;
+
+            const valorImposto = valorComImposto - valorSemImposto;
+            const porcentagemImposto = (valorImposto / valorSemImposto) * 100;
+
+
+            document.getElementById('resultado-com-imposto').innerHTML = `Valor atual com Imposto: <u> R$ ${valorComImposto.toFixed(2)} (${porcentagemImposto.toFixed(2)}% "COFINS,ICMS,PIS...")</u>`;
+            document.getElementById('resultado-sem-imposto').innerHTML = `Valor Líquido atual: <u> R$ ${valorSemImposto.toFixed(2)}</u> (Anual: <u> R$ ${valorAnualSemImposto.toFixed(2)}</u>)`;
+            document.getElementById('resultado-com-desconto').innerHTML = `Valor Líquido com Desconto(Ultragaz): <u> R$ ${valorComDesconto.toFixed(2)}</u> (Anual: <u> R$ ${valorAnualComDesconto.toFixed(2)}</u>)</u>)`;
+            document.getElementById('valor-desconto').innerHTML = `Valor do Desconto na Fatura Mensal: <u> R$ ${valorDoDesconto.toFixed(2)}</u>`;
+            document.getElementById('valor-anual-desconto').innerHTML = `Valor Anual do Desconto: <u> R$ ${valorAnualDesconto.toFixed(2)}</u>`;
+
+        }
+    </script>
+</body>
+
+</html>
