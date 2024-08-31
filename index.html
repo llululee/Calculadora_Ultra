@@ -167,7 +167,7 @@
             const porcentagemImposto = (valorImposto / valorSemImposto) * 100;
 
 
-            document.getElementById('resultado-com-imposto').innerHTML = `Valor atual com Imposto: <u> R$ ${valorComImposto.toFixed(2)} (${porcentagemImposto.toFixed(2)}% "COFINS,ICMS,PIS...")</u>`;
+            document.getElementById('resultado-com-imposto').innerHTML = `Valor atual com Imposto: <u> R$ ${valorComImposto.toFixed(2)} (${porcentagemImposto.toFixed(2)}% "COFINS, ICMS,PIS ...")</u>`;
             document.getElementById('resultado-sem-imposto').innerHTML = `Valor Líquido atual: <u> R$ ${valorSemImposto.toFixed(2)}</u> (Anual: <u> R$ ${valorAnualSemImposto.toFixed(2)}</u>)`;
             document.getElementById('resultado-com-desconto').innerHTML = `Valor Líquido com Desconto(Ultragaz): <u> R$ ${valorComDesconto.toFixed(2)}</u> (Anual: <u> R$ ${valorAnualComDesconto.toFixed(2)}</u>)</u>)`;
             document.getElementById('valor-desconto').innerHTML = `Valor do Desconto na Fatura Mensal: <u> R$ ${valorDoDesconto.toFixed(2)}</u>`;
